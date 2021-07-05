@@ -9,7 +9,7 @@ import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 import javax.swing.JFrame;
 
-//import eu.lagunalabs.myapp.Screen;
+import eu.lagunalabs.myapp.Screen;
 
 public class GameEngine extends Canvas implements Runnable {
 
@@ -72,11 +72,19 @@ public class GameEngine extends Canvas implements Runnable {
 			return;
 		}
 
+		myScreen.render();
+		for ( int i = 0 ; i < pixels.length ; i++ ) {
+			pixels[i] = myScreen.pixels[i];
+		}
+
 		Graphics g = bs.getDrawGraphics();
+
 		// The actual drawing stuff begins here ...
+		g.drawImage(image, 0, 0, getWidth(), getHeight(), null );
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, getWidth()/2, getHeight()/2);
 		// ... And ends here
+
 		g.dispose();
 		bs.show();
 	}
