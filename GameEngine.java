@@ -4,6 +4,8 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Color;
 import java.awt.image.BufferStrategy;
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferInt;
 
 import javax.swing.JFrame;
 
@@ -28,10 +30,14 @@ public class GameEngine extends Canvas implements Runnable {
 	private Thread myThread;
 	private JFrame frame;
 	private boolean running = false;
+	
+	// Buffered Image
+	private BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+	private int[] pixels = ((DataBufferInt) image.getRaster().getDataBuffer()).getData();
 
 	public synchronized void start() {
 		running = true;
-		myThread = new Thread(this, "Game");
+		myThread = new Thread(this, "Display");
 		myThread.start();
 	}
 
@@ -46,7 +52,6 @@ public class GameEngine extends Canvas implements Runnable {
 
 	public void run() {
 		while (running) {
-			//System.out.print("Running...\r");
 			update();
 			render();
 		}	
