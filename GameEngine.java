@@ -1,4 +1,5 @@
-//package eu.lagunalabs.gameengine;
+package eu.lagunalabs.myapp;
+
 import java.awt.Canvas;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -6,8 +7,9 @@ import java.awt.Color;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
-
 import javax.swing.JFrame;
+
+//import eu.lagunalabs.myapp.Screen;
 
 public class GameEngine extends Canvas implements Runnable {
 
@@ -21,15 +23,17 @@ public class GameEngine extends Canvas implements Runnable {
 
 	// Setting up my process
 
+	private Thread myThread;
+	private Screen myScreen;
+	private JFrame frame;
+	private boolean running = false;
+
 	public GameEngine() {
 		Dimension size = new Dimension( width*scale , height*scale );
 		setPreferredSize(size);
+		myScreen = new Screen(width, height);
 		frame = new JFrame();
 	}
-	
-	private Thread myThread;
-	private JFrame frame;
-	private boolean running = false;
 	
 	// Buffered Image
 	private BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
