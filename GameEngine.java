@@ -15,6 +15,10 @@ public class GameEngine extends Canvas implements Runnable {
 
 	private static final long serialVersionUID = 1L;
 
+	private static final int MILLISECONDS = 1000;
+	private static final int NANOSECONDS = 1000000000;
+
+
 	// Graphical Settings
 
 	public static int width = 480;
@@ -56,32 +60,41 @@ public class GameEngine extends Canvas implements Runnable {
 
 	public void run() {
 
-		final long singleFrame = (long) ( 1000 / 60.0 ); // 1/60th of a second = 1e9/60 nanoseconds
+		/*
+			If you want to change the precision used you can change
+			between "System.nanoTime()" and "System.currentTimeMillis()"
 
-		long lastTime = System.currentTimeMillis();
-		long timer = lastTime;
-		
+			Don't forget to adjust UNIT used (MILLISECONDS or NANOSECONDS)
+		*/
+
+		int TIME_UNIT = NANOSECONDS;
+
+		final long singleFrame = (long) ( TIME_UNIT / 60.0 ); // 1/60th of a second = 1e9/60 nanoseconds
+
+		long lastTime = System.nanoTime();
+		long lastSecond = lastTime;
+
 		int updates = 0;
 		int frames = 0;
 
 		while (running) {
 
-			if ( System.currentTimeMillis() - lastTime >= singleFrame ) {
+			if ( System.nanoTime() - lastTime >= singleFrame ) {
+				lastTime = System.nanoTime();
 				update();
 				updates++;
-				lastTime = System.currentTimeMillis();
 			}
+			
+			if ( System.nanoTime() - lastSecond >= TIME_UNIT ) {
+				lastSecond = System.nanoTime();
+				frame.setTitle("f: " + frames + " u: " + updates);
+				updates = 0;
+				frames = 0;
+			}	
 			
 			render();
 			frames++;
-			
-			if ( System.currentTimeMillis() - timer >= 1000 ) {
-				frame.setTitle("frames: " + frames + "\tupdates: " + updates);
-				updates = 0;
-				frames = 0;
-				timer = System.currentTimeMillis();
-			}	
-			
+						
 		}	
 	}
 
