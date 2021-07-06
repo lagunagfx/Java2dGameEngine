@@ -11,6 +11,12 @@ public class Screen {
 		pixels = new int[ width * height ]; // Don't forget to initialize the array so memory gets assigned to it
 	}	
 
+	public void clear() {
+		for ( int i = 0 ; i < pixels.length ; i++ ) {
+			pixels[i] = 0;
+		}
+	}
+
 	public void render() {
 		for ( int y = 0 ; y < height ; y++ ) {
 			for ( int x = 0 ; x < width ; x++) {
