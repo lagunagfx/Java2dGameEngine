@@ -59,19 +59,42 @@ public class GameEngine extends Canvas implements Runnable {
 		// 1 second = 1e9 nanoseconds
 		// 1/60th of a second = 1e9/60 nanoseconds
 		long lastTime = System.nanoTime();
-		final double minimumDelta = ( 1e9 / 60 );
+		final double minimumDelta = ( 1e9 / 60.0 );
+		double delta = 0;
+
+		int frames = 0;
+		int updates = 0;
+		long timer = System.currentTimeMillis();
 
 		while (running) {
 			// Will NOT execute this one more than 60 times per second
-			long delta = System.nanoTime() - lastTime;
-			//  --> ¿SHOULD BE HERE? (*)
-			while ( delta > minimumDelta ) {
-				delta = 0;
-				// --> ¿GOES IN HERE?
-				lastTime = System.nanoTime();
+
+			//long delta = System.nanoTime() - lastTime;
+			long now = System.nanoTime();
+			delta += ( now - lastTime ) / minimumDelta;
+			lastTime = now;			
+			
+			//if ( delta >= minimumDelta ) {
+			while ( delta >= 1 ) {
 				update();
+				System.out.println("delta: " + delta);
+				//delta = 0;
+				delta--;
+				//lastTime = System.nanoTime();
+				updates++;
 			}
 			render();
+			frames++;
+
+			if (System.currentTimeMillis() - timer > 1000) {
+				//timer = System.currentTimeMillis();
+				timer += 1000;
+				//System.out.println("frames: " + frames + "\tupdates: " + updates);
+				frame.setTitle("frames: " + frames + "\tupdates: " + updates);
+				updates = 0;
+				frames = 0;
+			}	
+
 		}	
 	}
 
