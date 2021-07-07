@@ -10,6 +10,7 @@ import java.awt.image.DataBufferInt;
 import javax.swing.JFrame;
 
 import eu.lagunalabs.myapp.Screen;
+import eu.lagunalabs.myapp.input.Keyboad;
 
 public class GameEngine extends Canvas implements Runnable {
 
@@ -29,6 +30,7 @@ public class GameEngine extends Canvas implements Runnable {
 	// Setting up my process
 	private Thread myThread;
 	private Screen myScreen;
+	private Keyboard keyboard;
 	private JFrame frame;
 	private boolean running = false;
 
