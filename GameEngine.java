@@ -15,18 +15,18 @@ public class GameEngine extends Canvas implements Runnable {
 
 	private static final long serialVersionUID = 1L;
 
+	private static final int FRAMERATE = 60;
 	private static final int MILLISECONDS = 1000;
 	private static final int NANOSECONDS = 1000000000;
 
+	public static String title = "My App";
 
 	// Graphical Settings
-
 	public static int width = 480;
 	public static int height = width / 16 * 9;
-	public static int scale = 1;
+	public static int scale = 2;
 
 	// Setting up my process
-
 	private Thread myThread;
 	private Screen myScreen;
 	private JFrame frame;
@@ -68,8 +68,7 @@ public class GameEngine extends Canvas implements Runnable {
 		*/
 
 		int TIME_UNIT = NANOSECONDS;
-
-		final long singleFrame = (long) ( TIME_UNIT / 60.0 ); // 1/60th of a second = 1e9/60 nanoseconds
+		final long singleFrame = (long) ( TIME_UNIT / FRAMERATE ); // 1/60th of a second = 1e9/60 nanoseconds
 
 		long lastTime = System.nanoTime();
 		long lastSecond = lastTime;
@@ -87,19 +86,21 @@ public class GameEngine extends Canvas implements Runnable {
 			
 			if ( System.nanoTime() - lastSecond >= TIME_UNIT ) {
 				lastSecond = System.nanoTime();
-				frame.setTitle("f: " + frames + " u: " + updates);
+				frame.setTitle( title + " f: " + frames + " u: " + updates );
 				updates = 0;
 				frames = 0;
 			}	
 			
 			render();
-			frames++;
-						
+			frames++;						
 		}	
 	}
 
+	int x = 0, y = 0;
+
 	public void update() {
-		assert true;
+		x++;
+		y++;
 	}
 
 	public void render() {
@@ -109,19 +110,15 @@ public class GameEngine extends Canvas implements Runnable {
 			return;
 		}
 
-		myScreen.render();
+		myScreen.clear();
+		myScreen.render(x,y);
+
 		for ( int i = 0 ; i < pixels.length ; i++ ) {
 			pixels[i] = myScreen.pixels[i];
 		}
 
 		Graphics g = bs.getDrawGraphics();
-
-		// The actual drawing stuff begins here ...
 		g.drawImage(image, 0, 0, getWidth(), getHeight(), null );
-		g.setColor(Color.BLACK);
-		g.fillRect(0, 0, getWidth()/2, getHeight()/2);
-		// ... And ends here
-
 		g.dispose();
 		bs.show();
 	}
@@ -129,7 +126,7 @@ public class GameEngine extends Canvas implements Runnable {
 	public static void main(String[] args) {
 		GameEngine myGame = new GameEngine();
 		myGame.frame.setResizable(false);
-		myGame.frame.setTitle("Just a working title");
+		myGame.frame.setTitle(title);
 		myGame.frame.add(myGame);
 		myGame.frame.pack();
 		myGame.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
