@@ -1,4 +1,4 @@
-package eu.lagunalabs.myapp;
+package eu.lagunalabs.myapp.graphics;
 
 import java.util.Random;
 

@@ -9,8 +9,8 @@ import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 import javax.swing.JFrame;
 
-import eu.lagunalabs.myapp.Screen;
-import eu.lagunalabs.myapp.input.Keyboad;
+import eu.lagunalabs.myapp.graphics.Screen;
+import eu.lagunalabs.myapp.input.Keyboard;
 
 public class GameEngine extends Canvas implements Runnable {
 
@@ -30,15 +30,19 @@ public class GameEngine extends Canvas implements Runnable {
 	// Setting up my process
 	private Thread myThread;
 	private Screen myScreen;
-	private Keyboard keyboard;
+	private Keyboard key;
 	private JFrame frame;
 	private boolean running = false;
 
 	public GameEngine() {
 		Dimension size = new Dimension( width*scale , height*scale );
 		setPreferredSize(size);
+
 		myScreen = new Screen(width, height);
 		frame = new JFrame();
+		key = new Keyboard();
+
+		addKeyListener(key);
 	}
 	
 	// Buffered Image
@@ -101,8 +105,12 @@ public class GameEngine extends Canvas implements Runnable {
 	int x = 0, y = 0;
 
 	public void update() {
-		x++;
-		y++;
+		key.update();
+		
+		if (key.left) x--;
+		if (key.right) x++;
+		if (key.up) y--;
+		if (key.down ) y++;
 	}
 
 	public void render() {
